@@ -18,7 +18,7 @@ using System.Drawing;
 using System.Xml.Schema;
 //using SlugBase.SaveData;
 
-public static class TheCryptographer
+public static class MushroomStorage
 {
     public class CryptoDrugCartel
     {

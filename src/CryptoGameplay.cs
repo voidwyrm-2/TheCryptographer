@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace NuclearPasta.TheCryptographer
 {
@@ -13,6 +14,15 @@ namespace NuclearPasta.TheCryptographer
         {
             On.RoomSpecificScript.SU_A43SuperJumpOnly.Update += RemoveSurvJumpTutorial;
             On.RoomSpecificScript.SU_C04StartUp.Update += RemoveSurvFoodTutorial;
+            On.SporeCloud.Update += SporeCloud_FunnyColors;
+        }
+
+
+        //gives the sporecloud FuNnY cOlOrS when it's Crypto's game
+        private static void SporeCloud_FunnyColors(On.SporeCloud.orig_Update orig, SporeCloud self, bool eu)
+        {
+            if (CryptosGame) self.color = Color.red;
+            orig(self, eu);
         }
 
         #region RemoveTutorials
