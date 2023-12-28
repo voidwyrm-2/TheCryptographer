@@ -1,0 +1,9 @@
+﻿{
+	"id": "nc.TheCryptographer",
+	"name": "The Cartographer",
+	"version": "0.1.0",
+	"authors": "Nuclear Pasta",
+	"description": "Adds a scug I made for exploring regions, hence the name",
+	"requirements": [ "slime-cubed.slugbase" ],
+	"requirements_names": [ "SlugBase" ]
+}
