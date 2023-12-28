@@ -2,7 +2,7 @@
 A slugcat on a mission to map everything
 
 This is partly inspired by Da Vinki
-'inspired' in that I that Da Vinki was completely against drugs and said 'hold my non-alcoholic drink'
+'inspired' in that I that Da Vinki was completely against drugs and said 'hold my non-alcoholic drink'\n
 So Crypto is a druggie
 Have fun!
 (world state is Survivor)
