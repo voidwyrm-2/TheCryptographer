@@ -20,7 +20,8 @@ Have fun!
 - Sporepuffs give food
 
 ### Planned Features:
-- Sporepuffs give effects when ingested
+- Sporepuffs give the mushroom effect when ingested
 - Sporepuff clouds are red in Crypto’s campaign
-- Sporepuff clouds give effects when inhaled
-- Custom spear: Reinforced Spear(batnip + spear)
+- Sporepuff clouds give the mushroom effect when inhaled
+- Batnip gives the mushroom effect(since it’s ‘grass’)
+- Custom spear: Reinforced Spear(batnip/bubblegrass + spear)
