@@ -17,9 +17,9 @@ Have fun!
   3. rock + spear = electric spear
   4. (planned) spear + ? = fire spear
 - Stat boosts when on mushrooms
-- Sporepuffs give food
 
 ### Planned Features:
+- Sporepuffs give food
 - Sporepuffs give the mushroom effect when ingested
 - Sporepuff clouds are red in Crypto’s campaign
 - Sporepuff clouds give the mushroom effect when inhaled
