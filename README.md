@@ -25,3 +25,4 @@ Have fun!
 - Sporepuff clouds give the mushroom effect when inhaled
 - Batnip gives the mushroom effect(since it’s ‘grass’)
 - Custom spear: Reinforced Spear(batnip/bubblegrass + spear)
+- Custom keybind for crafting
