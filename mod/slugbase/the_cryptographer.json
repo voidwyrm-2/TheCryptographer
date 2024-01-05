@@ -1,19 +1,21 @@
 {
 	"id": "NC.Cryptographer",
 	"name": "The Cartographer",
-	"description": "A slugcat from a far-away land, on a mission to map out everything",
+	"description": "A slugcat from a far-away land, on a mission to map out everything while under the influence of drugs<LINE>I doubt he can do it",
 	"features": {
 		"expedition_enabled": true,
-		"color": "ac3232",
+		"expedition_description": "With his addiction to mushrooms getting stronger and stronger, he's been forced to find more... somewhere<LINE>He'll figure it out when he gets there",
+		"color": "94503e",
 		"custom_colors": [
 			{
 				"name": "Body",
-				"story": "ac3232",
-				"arena": [ "FFFFFF", "FF8080", "80FF80", "8080FF" ]
+				"story": "94503e",
+				"arena": [ "94503e", "ac3232", "bfa6a6", "63c64d" ]
 			},
 			{
 				"name": "Eyes",
-				"story": "8a6f30"
+				"story": "8a6f30",
+				"arena": [ "8a6f30", "8a6f30", "d7ff63", "147c80" ]
 			}
 		],
 		"auto_grab_batflies": false,
@@ -24,18 +26,18 @@
 			"base": "Gourmand",
 			"overrides": {
 				"DangleFruit": 1.5,
-				"SlimeMold": 2
+				"SlimeMold": 2,
+				"Mushroom": 10
 			}
 		},
 		"weight": 1.7,
 		"tunnel_speed": 1,
 		"climb_speed": 1.7,
-		"walk_speed": 2.1,
+		"walk_speed": 1.8,
 		"crouch_stealth": [6.5, 10.5],
 		"throw_skill": [1, 0],
 		"lung_capacity": [3.8, 2.6],
 		"loudness": [0.4, 0],
-
 
 
 		"karma": 0,
@@ -55,6 +57,8 @@
 
 		
 		"select_menu_scene": "Slugcat_Cryptographer",
-		"select_menu_scene_ascended": "Ghost_Cryptographer"
+		"select_menu_scene_ascended": "Ghost_Cryptographer",
+        "title_card": "TitleCard_CryptoCarto"
+
 	}
 }

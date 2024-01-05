@@ -4,6 +4,8 @@
 	"version": "0.1.0",
 	"authors": "Nuclear Pasta",
 	"description": "Adds a scug I made for exploring regions, hence the name",
-	"requirements": [ "slime-cubed.slugbase" ],
-	"requirements_names": [ "SlugBase" ]
+	"checksum_override": true,
+	"requirements": [ "slime-cubed.slugbase", "fisobs", "improved-input-config" ],
+	"requirements_names": [ "SlugBase", "Fisobs", "Improved Input Config" ],
+	"tags": [ "Custom Slugcat", "Game Mechanics", "Campaigns", "Items" ]
 }

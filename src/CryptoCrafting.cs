@@ -1,23 +1,58 @@
-﻿using System;
+﻿using ImprovedInput;
+using MonoMod.RuntimeDetour;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace NuclearPasta.TheCryptographer
 {
     public class CryptoCrafting
     {
-        static readonly SlugcatStats.Name CryptoScug = NuclearPasta.TheCryptographer.Plugin.CryptoScug;
+        static readonly SlugcatStats.Name CryptoScug = Plugin.CryptoScug;
+
         public static void OnEnable()
         {
             On.Player.GraspsCanBeCrafted += Player_GraspsCanBeCrafted;
             On.Player.CraftingResults += Player_CraftingResults;
             //On.Player.GraspsCanBeCrafted += Player_AllowGourmCrafting;
             On.RainWorld.PostModsInit += RainWorld_CraftingHooks;
+            //On.RainWorld.OnModsInit += RainWorld_AddKeybindDescs;
         }
 
-        #region PointlessStuff
+        /*
+        private static void RainWorld_AddKeybindDescs(On.RainWorld.orig_OnModsInit orig, RainWorld self)
+        {
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                //Plugin.Logger.LogError(ex);
+            }
+            finally
+            {
+                orig(self);
+            }
+        }
+        */
+
+        private static readonly bool debugUseCustomKey = false;
+        public static bool IsCraftSpearCustomInput(Player self)
+        {
+            return CustomInputExt.IsKeyBound(self, Plugin.CraftSpear) && self.controller == null/* && Plugin.ImprovedInputEnabled*/ && debugUseCustomKey;
+        }
+
+        private static bool IsCraftSpearPressed(Player self)
+        {
+            if (!IsCraftSpearCustomInput(self)) return self.input[0].y == 1;
+            return true;
+        }
+
+        #region BoringStuff
         private static void RainWorld_CraftingHooks(On.RainWorld.orig_PostModsInit orig, RainWorld self)
         {
             On.MoreSlugcats.GourmandCombos.CraftingResults += GourmandCombos_CraftingResults;
@@ -26,8 +61,7 @@ namespace NuclearPasta.TheCryptographer
 
         private static bool Player_GraspsCanBeCrafted(On.Player.orig_GraspsCanBeCrafted orig, Player self)
         {
-            if (self.SlugCatClass == CryptoScug)
-                return self.input[0].y == 1 && self.CraftingResults() != null;
+            if (self.SlugCatClass == CryptoScug) return IsCraftSpearPressed(self) && self.CraftingResults() != null;
 
             return orig(self);
         }
@@ -72,12 +106,12 @@ namespace NuclearPasta.TheCryptographer
                 #endregion
 
                 #region Electric
-                else if ((grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Rock && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Spear) || (grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Spear && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Rock)) { var electricSpear = new AbstractSpear(player.room.world, null, player.abstractCreature.pos, player.room.game.GetNewID(), false, true); electricSpear.electricCharge = 0; return electricSpear; }
+                else if ((grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Rock && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Spear && ModManager.MSC) || (grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Spear && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Rock)) { var electricSpear = new AbstractSpear(player.room.world, null, player.abstractCreature.pos, player.room.game.GetNewID(), false, true); electricSpear.electricCharge = 0; return electricSpear; }
                 #endregion
 
-                /*#region Fire
-                else if (grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Rock && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Rock) return new AbstractSpear(player.room.world, null, player.abstractCreature.pos, player.room.game.GetNewID(), false, false);
-                #endregion*/
+                #region Fire
+                else if (grabbedObjectTypeA == AbstractPhysicalObject.AbstractObjectType.Rock && grabbedObjectTypeB == AbstractPhysicalObject.AbstractObjectType.Rock && ModManager.MSC) return new AbstractSpear(player.room.world, null, player.abstractCreature.pos, player.room.game.GetNewID(), false, 2.5f);
+                #endregion
                 #endregion
                 #endregion
             }
