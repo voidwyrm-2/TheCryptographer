@@ -1,28 +1,18 @@
 ﻿using System;
 using BepInEx;
 using UnityEngine;
-using SlugBase.Features;
-using static SlugBase.Features.FeatureTypes;
-using System.Runtime.InteropServices.WindowsRuntime;
-using On;
-using static MonoMod.InlineRT.MonoModRule;
-using IL.MoreSlugcats;
-using IL;
-using System.Diagnostics.Eventing.Reader;
-using Fisobs.Core;
 using ImprovedInput;
 using MonoMod.Cil;
 using Mono.Cecil.Cil;
-using MonoMod.RuntimeDetour;
 
 namespace NuclearPasta.TheCryptographer
 {
-    [BepInEx.BepInDependency("fisobs", BepInEx.BepInDependency.DependencyFlags.HardDependency)]
+    //[BepInEx.BepInDependency("fisobs", BepInEx.BepInDependency.DependencyFlags.HardDependency)]
     [BepInEx.BepInDependency("improved-input-config", BepInEx.BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin("nc.TheCryptographer", "The Cryptographer", "0.1.0")]
     class Plugin : BaseUnityPlugin
     {
-        /* from Pocky(Pocky is great <-- NO POCKY IS not GREAT, HE'S BRITISH):
+        /* from Pocky(Pocky is great <-- NO POCKY IS *NOT* GREAT, HE'S BRITISH):
         Basically
         check if grasp 0 has a rock and grasp 1 has a rock and return true if that happens
         And then hook to SpitUpCraftedObject
@@ -32,10 +22,6 @@ namespace NuclearPasta.TheCryptographer
         then call return if you did this before orig so it doesn't try any more crafts
         */
 
-        //public static readonly PlayerFeature<float> SuperJump = PlayerFloat("cryptocarto/super_jump");
-        //public static readonly PlayerFeature<bool> ExplodeOnDeath = PlayerBool("cryptocarto/explode_on_death");
-        //public static readonly GameFeature<float> MeanLizards = GameFloat("cryptocarto/mean_lizards");
-        //public static readonly PlayerFeature<bool> ExplosiveSpear = PlayerBool("cryptocarto/explosive_spear");
         //public static readonly GameFeature<float> ScaredCentis = GameFloat("cryptocarto/scared_centis");
 
 
@@ -71,12 +57,6 @@ namespace NuclearPasta.TheCryptographer
                 Logger.LogError(e);
             }
 
-            On.RainWorld.OnModsInit += Extras.WrapInit(LoadResources);
-
-            //Content.Register(new Custom.ReinforcedSpear.ReinforcedSpearFisobs());
-            //On.Player.Jump += Player_Jump;
-            //On.Player.Die += Player_Die;
-            //On.Lizard.ctor += Lizard_ctor;
             CryptoGameplay.OnEnable();
             CryptoCrafting.OnEnable();
             CryptoDRUGS.OnEnable();
@@ -147,20 +127,6 @@ namespace NuclearPasta.TheCryptographer
         }
 
 
-        // Load any resources, such as sprites or sounds
-        private void LoadResources(RainWorld rainWorld)
-        {
-            try
-            {
-                Futile.atlasManager.LoadImage("assets/icon_ReinforcedSpear");
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e);
-            }
-        }
-
-
         private static readonly bool LogMushrooms = false;
         private static readonly bool LogKeys = true;
         private static readonly bool LogDrugs = false;
@@ -185,8 +151,7 @@ namespace NuclearPasta.TheCryptographer
             orig(self, eu);
         }
 
-        private void Player_IsScug(On.Player.orig_Update orig, Player self, bool eu)
-        {
+        private void Player_IsScug(On.Player.orig_Update orig, Player self, bool eu){
             if (self.SlugCatClass == CryptoScug) ScugIsCrypto = true;
             else ScugIsCrypto = false;
             orig(self, eu);

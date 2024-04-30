@@ -1,22 +1,11 @@
-﻿using System;
-using BepInEx;
-using UnityEngine;
+﻿using UnityEngine;
 using MoreSlugcats;
 using RWCustom;
-using SlugBase.Features;
-using static SlugBase.Features.FeatureTypes;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using Expedition;
-using Noise;
 using Random = UnityEngine.Random;
 using Color = UnityEngine.Color;
 using System.Runtime.CompilerServices;
 using System.Linq;
-//using HooksAndReadonlys;
-using System.Drawing;
-using System.Xml.Schema;
-//using SlugBase.SaveData;
 
 public static class MushroomStorage
 {
@@ -53,18 +42,18 @@ public static class StoreMechanicsCloudtail
         bool Storeinputs = self.input[0].y > 0 && (self.bodyChunks[1].contactPoint.y < 0 || self.animation == Player.AnimationIndex.StandOnBeam || self.animation == Player.AnimationIndex.BeamTip || (!self.submerged && self.Submersion > 0f)) && self.eatMeat <= 20 && !self.input[0].pckp && self.input[0].x == 0;
         //bool hands = (self.grasps[1] != null && self.grasps[0] == null) || (self.grasps[0] != null && self.grasps[1] == null);
 
-        if (!Storeinputs) return false;//Incorrect inputs, returning false!
+        if (!Storeinputs) return false; // Incorrect inputs, returning false!
 
         if (self.room == null) return false;
 
         if (self.grasps[0] == null && self.grasps[1] == null) return false;
 
         int handnum;
-        if (self.grasps[0] != null) handnum = 0;//make the variable match the index of the grasp
+        if (self.grasps[0] != null) handnum = 0; // make the variable match the index of the grasp
         else handnum = 1;
 
         PhysicalObject grabbed = self.grasps[handnum].grabbed;
-        self.GetCat().GraspToTakeFrom = handnum;//remember the index of the hand we're stealing from
+        self.GetCat().GraspToTakeFrom = handnum; // remember the index of the hand we're stealing from
 
         if (grabbed is Creature) return (grabbed as Creature).dead;
         return true;
