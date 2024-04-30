@@ -44,7 +44,7 @@ namespace NuclearPasta.TheCryptographer
 
         public static float CentiScaredness = 1f;
 
-        public void BIXLog(string info) => Logger.LogInfo(info);
+        public void BIXLog(string info) => Logger.LogDebug(info);
 
         public void OnEnable()
         {
@@ -61,17 +61,21 @@ namespace NuclearPasta.TheCryptographer
             CryptoCrafting.OnEnable();
             CryptoDRUGS.OnEnable();
             
-            On.Player.Update += Player_IsScugsGame; //checks if it is actually a story game session and if that story game session is Crypto's campaign
-            On.Player.Update += Player_IsScug; //checks if the current player instance is Crypto
+            On.Player.Update += Player_IsScugsGame; // checks if it is actually a story game session and if that story game session is Crypto's campaign
+            On.Player.Update += Player_IsScug; // checks if the current player instance is Crypto
 
-            On.Player.Update += Player_LogStuff; //logs certain values
+            On.Player.Update += Player_LogStuff; // logs certain values
 
             On.RainWorld.PostModsInit += RainWorld_PostModsInit;
             On.RainWorld.OnModsInit += RainWorld_OnModsInit;
 
-            IL.Menu.IntroRoll.ctor += IntroRoll_ctor; //allows for multiple(or at least two) title cards, courtesy of OlayColay(Vinki's creator), thanks OlayColay!
+            IL.Menu.IntroRoll.ctor += IntroRoll_ctor; // allows for multiple(or at least two) title cards, courtesy of OlayColay(Vinki's creator), thanks OlayColay!
 
-            On.CentipedeAI.IUseARelationshipTracker_UpdateDynamicRelationship += CentipedeAI_IUseARelationshipTracker_UpdateDynamicRelationship; //since Crypto reeks of drugs(sporepuffs among them), he repels centipedes slightly
+            On.CentipedeAI.IUseARelationshipTracker_UpdateDynamicRelationship += CentipedeAI_IUseARelationshipTracker_UpdateDynamicRelationship; // since Crypto reeks of drugs(sporepuffs among them), he repels centipedes slightly
+            
+            On.Player.ThrownSpear += Player_ThrownSpear; // gives spears that Crypto throws a boost
+
+            On.Player.Update += Player_DruggieMode; // gives Crypto stat boosts when under the effect of mushrooms
         }
 
         private CreatureTemplate.Relationship CentipedeAI_IUseARelationshipTracker_UpdateDynamicRelationship(On.CentipedeAI.orig_IUseARelationshipTracker_UpdateDynamicRelationship orig, CentipedeAI self, RelationshipTracker.DynamicRelationship dRelation)
@@ -98,7 +102,74 @@ namespace NuclearPasta.TheCryptographer
             }
         }
 
+        private static readonly bool logSpearThrown = false;
+        private void Player_ThrownSpear(On.Player.orig_ThrownSpear orig, Player self, Spear spear)
+        {
+            if (self.SlugCatClass == CryptoScug && self.mushroomEffect != 0f)
+            {
+                if (logSpearThrown)
+                {
+                    Logger.LogDebug("Spear was thrown by CryptoSlug with mushroom effect!");
+                    Logger.LogDebug($"Before the boost its stats were: spearDamageBonus={spear.spearDamageBonus}, gravity={spear.gravity}, bodyChunks[0].vel.y={spear.bodyChunks[0].vel.y}");
+                }
 
+                if (self.mushroomEffect > 7.25f) spear.spearDamageBonus += 9f;
+                else spear.spearDamageBonus += 5f;
+                spear.gravity = 0.1f;
+                spear.bodyChunks[0].vel.y *= 2.5f;
+
+                if (logSpearThrown) Logger.LogDebug($"Now its stats are: spearDamageBonus={spear.spearDamageBonus}, gravity={spear.gravity}, bodyChunks[0].vel.y={spear.bodyChunks[0].vel.y}");
+            }
+
+            orig(self, spear);
+        }
+
+        #region funkymushrooms
+        private static readonly bool logPlayerStats = true;
+        private static bool canLogPlayerStatsOtherwise = false;
+        private void Player_DruggieMode(On.Player.orig_Update orig, Player self, bool eu)
+        {
+            //float[] runSpeed = { 10f };
+            if (self.SlugCatClass == CryptoScug)
+            {
+                if (self.mushroomCounter != 0)
+                {
+                    if (logPlayerStats) Logger.LogDebug($"CryptoSlug is under the influence of drugs, stats: " +
+                        $"glowing={self.glowing}, " +
+                        $"slugcatStats.throwingSkill={self.slugcatStats.throwingSkill}, " +
+                        $"dynamicRunSpeed[0]=0;{self.dynamicRunSpeed[0]} 1;{self.dynamicRunSpeed[1]}, " +
+                        $"playerState.permanentDamageTracking={self.playerState.permanentDamageTracking}, " +
+                        $"Malnourished={self.Malnourished}"
+                        ); canLogPlayerStatsOtherwise = true;
+                    self.Blink(5);
+                    self.glowing = true;
+                    self.slugcatStats.throwingSkill = 4;
+                    self.dynamicRunSpeed[0] = 3f;
+                    self.dynamicRunSpeed[1] = 3.5f;
+                    //self.mushroomEffect = 0.5f;
+                    self.Regurgitate();
+                    self.playerState.permanentDamageTracking = 0.0;
+                    if (self.Malnourished)
+                    {
+                        self.SetMalnourished(false);
+                    }
+                }
+                else
+                {
+                    self.glowing = false;
+                    self.slugcatStats.throwingSkill = 1;
+                    if (canLogPlayerStatsOtherwise && logPlayerStats) Logger.LogDebug($"CryptoSlug is no longer under the influence of drugs, stats: " +
+                        $"glowing={self.glowing}, " +
+                        $"slugcatStats.throwingSkill={self.slugcatStats.throwingSkill}, " +
+                        $"dynamicRunSpeed[0]=0;{self.dynamicRunSpeed[0]} 1;{self.dynamicRunSpeed[1]}, " +
+                        $"playerState.permanentDamageTracking={self.playerState.permanentDamageTracking}, " +
+                        $"Malnourished={self.Malnourished}"
+                        ); canLogPlayerStatsOtherwise = false;
+                }
+            }
+            orig(self, eu);
+        }
+        #endregion
 
         private void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
         {
@@ -134,17 +205,17 @@ namespace NuclearPasta.TheCryptographer
         {
             if (LogMushrooms)
             { 
-                Logger.LogInfo("mushroomEffect:" + self.mushroomEffect.ToString());
-                Logger.LogInfo("mushroomCounter:" + self.mushroomCounter.ToString());
+                Logger.LogDebug("mushroomEffect:" + self.mushroomEffect.ToString());
+                Logger.LogDebug("mushroomCounter:" + self.mushroomCounter.ToString());
             }
             if (LogKeys)
             {
-                if(CryptoCrafting.IsCraftSpearCustomInput(self)) Logger.LogInfo("CraftSpearkey:" + Convert.ToString(self.IsPressed(CraftSpear)));
+                if(CryptoCrafting.IsCraftSpearCustomInput(self)) Logger.LogDebug("CraftSpearkey:" + Convert.ToString(self.IsPressed(CraftSpear)));
             }
             if (LogDrugs)
             {
-                Logger.LogInfo("AtePuff:" + AtePuff.ToString());
-                Logger.LogInfo("AteWeed:" + AteWeed.ToString());
+                Logger.LogDebug("AtePuff:" + AtePuff.ToString());
+                Logger.LogDebug("AteWeed:" + AteWeed.ToString());
                 //if (AtePuff) AtePuff = false;
                 //if (AteWeed) AteWeed = false;
             }

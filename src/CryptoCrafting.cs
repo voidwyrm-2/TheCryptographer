@@ -19,26 +19,7 @@ namespace NuclearPasta.TheCryptographer
             On.Player.CraftingResults += Player_CraftingResults;
             //On.Player.GraspsCanBeCrafted += Player_AllowGourmCrafting;
             On.RainWorld.PostModsInit += RainWorld_CraftingHooks;
-            //On.RainWorld.OnModsInit += RainWorld_AddKeybindDescs;
         }
-
-        /*
-        private static void RainWorld_AddKeybindDescs(On.RainWorld.orig_OnModsInit orig, RainWorld self)
-        {
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                //Plugin.Logger.LogError(ex);
-            }
-            finally
-            {
-                orig(self);
-            }
-        }
-        */
 
         private static readonly bool debugUseCustomKey = false;
         public static bool IsCraftSpearCustomInput(Player self)
